@@ -8,6 +8,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Grocerie.Application\Grocerie.Application.csproj" />
+    <ProjectReference Include="..\Grocerie.Infrastructure\Grocerie.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="7.2.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="7.2.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="7.2.0" />
   </ItemGroup>
 
 </Project>
