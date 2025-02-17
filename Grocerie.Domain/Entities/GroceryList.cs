@@ -7,6 +7,7 @@ public class GroceryList
     public string? Description { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    public List<GroceryItem> Items { get; set; } = [];
     public Guid UserId { get; set; } //FK
     public required User User { get; set; } //Navigation property
 }
