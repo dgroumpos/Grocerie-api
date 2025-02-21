@@ -1,5 +1,5 @@
+using Grocerie.Application.DTOs;
 using Grocerie.Infrastructure.Auth;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Grocerie.API.Controllers;
