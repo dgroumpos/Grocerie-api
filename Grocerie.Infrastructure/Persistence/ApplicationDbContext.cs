@@ -8,4 +8,15 @@ public class ApplicationDbContext(DbContextOptions options) : IdentityDbContext<
 {
     public DbSet<GroceryList> GroceryLists { get; set; }
     public DbSet<GroceryItem> GroceryItems { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+        
+        //Configure Identity
+        builder.Entity<User>()
+            .HasMany<GroceryList>()
+            .WithOne()
+            .HasForeignKey(x => x.UserId);
+    }
 }
