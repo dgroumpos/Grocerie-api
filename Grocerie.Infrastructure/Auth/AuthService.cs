@@ -3,21 +3,22 @@ using System.Security.Claims;
 using System.Text;
 using Grocerie.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Grocerie.Infrastructure.Auth;
 
-public class AuthService(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
+public class AuthService(UserManager<User> userManager, SignInManager<User> signInManager, IOptions<JwtSettings> jwtOptions)
     : IAuthService
 {
+    private readonly JwtSettings _jwtSettings = jwtOptions.Value;
     public async Task<string?> LoginAsync(string email, string password)
     {
         var user = await userManager.FindByEmailAsync(email);
         if (user == null || await userManager.CheckPasswordAsync(user, password)) return null;
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!);
+        var key = Encoding.UTF8.GetBytes(_jwtSettings.Key);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
