@@ -18,27 +18,7 @@ builder.Services.AddScoped<GroceryItemService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(options =>
-    {
-        var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
-        var key = Encoding.UTF8.GetBytes(jwtSettings!.Key);
 
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtSettings.Issuer,
-            ValidAudience = jwtSettings.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(key)
-        };
-    });
 //Register MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(
     typeof(GetAllGroceryListsHandler).Assembly));
