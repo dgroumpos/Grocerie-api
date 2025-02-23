@@ -1,4 +1,5 @@
 using System.Text;
+using Grocerie.Application.Handlers.GroceryListHandlers.Queries;
 using Grocerie.Application.Services;
 using Grocerie.Infrastructure;
 using Grocerie.Infrastructure.Auth;
@@ -38,12 +39,16 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(key)
         };
     });
+//Register MediatR
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(
+    typeof(GetAllGroceryListsHandler).Assembly));
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
