@@ -9,5 +9,5 @@ public class GroceryList
     public DateTime UpdatedAt { get; set; }
     public List<GroceryItem> Items { get; set; } = [];
     public Guid UserId { get; set; } //FK
-    public required User User { get; set; } //Navigation property
+    public User User { get; set; } //Navigation property
 }
