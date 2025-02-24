@@ -18,7 +18,7 @@ public class GroceryListController(IMediator mediator) : ControllerBase
         return Ok(lists);
     }
 
-    [HttpGet]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetListById(GetGroceryListByIdQuery query)
     {
         var list = await mediator.Send(query);
@@ -26,12 +26,12 @@ public class GroceryListController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddList(CreateGroceryListCommand command)
+    public async Task<IActionResult> AddList([FromBody] CreateGroceryListCommand command)
     {
       var id = await mediator.Send(command);
-      return Created(nameof(GetListById), id);
+      return CreatedAtAction(nameof(GetListById), new { id }, id);
     }
-
+    
     [HttpPut]
     public async Task<IActionResult> UpdateList(Guid id, [FromBody]UpdateGroceryListCommand command)
     {
