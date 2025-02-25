@@ -11,8 +11,16 @@ public class AuthController(IAuthService authService) : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        var result = await authService.RegisterAsync(request.Email, request.Password);
-        return result ? Ok("User registered successfully") : BadRequest("User registration failed");
+        try
+        {
+            var result = await authService.RegisterAsync(request.Email, request.Password);
+            return result ? Ok("User registered successfully") : BadRequest("User registration failed");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+       
     }
 
     [HttpPost("login")]
