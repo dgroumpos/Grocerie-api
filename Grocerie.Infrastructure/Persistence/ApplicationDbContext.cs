@@ -26,6 +26,10 @@ public class ApplicationDbContext(DbContextOptions options) : IdentityDbContext<
             .HasForeignKey(gl => gl.GroceryListId)
             .OnDelete(DeleteBehavior.Cascade);
         
+        builder.Entity<GroceryList>()
+            .Property(gl => gl.UserId)
+            .IsRequired();
+        
         builder.Entity<GroceryItem>()
             .Property(gi => gi.Name)
             .HasMaxLength(100)

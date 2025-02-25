@@ -9,7 +9,6 @@ public class CreateGroceryListHandler(IGenericRepository<GroceryList> repository
 {
     public async Task<Guid> Handle(CreateGroceryListCommand request, CancellationToken cancellationToken)
     {
-        Console.WriteLine($"Received CreateGroceryListCommand: {request.Title}, {request.UserId}");
         var list = new GroceryList {Id = Guid.NewGuid(), Title = request.Title, UserId = request.UserId.ToString()};
         await repository.AddAsync(list);
         await repository.SaveChangesAsync();

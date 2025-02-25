@@ -27,7 +27,6 @@ public class AuthController(IAuthService authService) : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var token = await authService.LoginAsync(request.Email, request.Password);
-        Console.WriteLine($"Generated Token: {token}");
         return token != null ? Ok(new { Token = token }) : BadRequest("Invalid credentials");
     }
 }
