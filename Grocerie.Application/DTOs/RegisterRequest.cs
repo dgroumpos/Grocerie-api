@@ -1,3 +1,7 @@
 namespace Grocerie.Application.DTOs;
 
-public record RegisterRequest(string Email, string Password);
+public record RegisterRequest
+{
+    public string Email { get; init; } = string.Empty;
+    public string Password { get; init; } = string.Empty;
+}
