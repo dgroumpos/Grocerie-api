@@ -17,7 +17,6 @@ This is a backend API built with **ASP.NET Core 9** and Clean Architecture for a
 - **SQL Server**: Database for storing user data, lists, and items.
 - **MediatR**: For implementing the CQRS pattern.
 - **FluentValidation**: For validating requests.
-- **AutoMapper**: For object-to-object mapping.
 
 ## Project Structure
 

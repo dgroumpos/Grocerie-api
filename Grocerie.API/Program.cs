@@ -2,6 +2,8 @@ using Grocerie.Application.Handlers.GroceryListHandlers.Queries;
 using Grocerie.Application.Services;
 using Grocerie.Infrastructure;
 using Grocerie.Infrastructure.Auth;
+using Grocerie.Infrastructure.Middleware;
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,6 +43,28 @@ builder.Services.AddHttpLogging(logging =>
     logging.ResponseBodyLogLimit = 4096;
 });
 
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var errors = context.ModelState
+            .Where(e => e.Value?.Errors.Count > 0)
+            .Select(e => new
+            {
+                Field = e.Key,
+                Error = e.Value?.Errors.First().ErrorMessage
+            });
+
+        var errorResponse = new
+        {
+            Message = "Validation errors occurred.",
+            Errors = errors
+        };
+        
+        return new BadRequestObjectResult(errorResponse);
+    };
+});
+
 builder.Services.AddScoped<GroceryListService>();
 builder.Services.AddScoped<GroceryItemService>();
 builder.Services.AddControllers();
@@ -55,6 +79,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseHttpLogging();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseRouting();

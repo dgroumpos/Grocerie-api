@@ -42,7 +42,7 @@ public class GroceryListController(IMediator mediator) : ControllerBase
         return CreatedAtAction(nameof(GetListById), new { id }, id);
     }
 
-    [HttpPut]
+    [HttpPut("{id}")]
     public async Task<IActionResult> UpdateList(Guid id, [FromBody] UpdateGroceryListCommand command)
     {
         if (id != command.Id)
@@ -52,7 +52,7 @@ public class GroceryListController(IMediator mediator) : ControllerBase
         return success ? Ok("List updated successfully") : NotFound("List not found");
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteList(Guid id)
     {
         var success = await mediator.Send(new DeleteGroceryListCommand(id));
