@@ -1,12 +1,16 @@
-using System.Text;
 using Grocerie.Application.Handlers.GroceryListHandlers.Queries;
 using Grocerie.Application.Services;
 using Grocerie.Infrastructure;
 using Grocerie.Infrastructure.Auth;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+builder.Host.UseSerilog();
 
 // Bind JWT settings from configuration
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
@@ -29,6 +33,14 @@ builder.Services.ConfigureApplicationCookie(options =>
         return Task.CompletedTask;
     };
 });
+
+builder.Services.AddHttpLogging(logging =>
+{
+    logging.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
+    logging.RequestBodyLogLimit = 4096;
+    logging.ResponseBodyLogLimit = 4096;
+});
+
 builder.Services.AddScoped<GroceryListService>();
 builder.Services.AddScoped<GroceryItemService>();
 builder.Services.AddControllers();
@@ -42,6 +54,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseHttpLogging();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseRouting();
